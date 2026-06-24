@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Governance & Privacy — ReflectIQ{% endblock %}
+{% block content %}
+<div class="container">
+  <div style="padding: 48px 0 80px;">
+
+    <div class="hero-badge" style="display:inline-flex;margin-bottom:20px;">
+      🔒 Governance & Data Use
+    </div>
+    <h1 class="page-title" style="font-size:32px;margin-bottom:8px;">How ReflectIQ uses your data</h1>
+    <p class="page-sub" style="max-width:580px;">This page explains what information is collected, how it is separated, and the governance rules that protect students and inform faculty.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin:36px 0;">
+
+      <div class="gov-card">
+        <div class="gov-card-icon">🪪</div>
+        <div class="gov-card-title">Completion Tracking — Identifiable</div>
+        <div class="gov-card-body">
+          When you submit a reflection, your <strong>name and student ID</strong> are recorded in a separate completion log. This confirms that you participated in the session activity.
+          <ul>
+            <li>Used only for attendance and completion tracking</li>
+            <li>Visible to faculty on the Completion Status page</li>
+            <li>Never linked to your reflection answers</li>
+            <li>Never used for grading or ranking</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-icon">🧠</div>
+        <div class="gov-card-title">Reflection Analysis — Anonymized</div>
+        <div class="gov-card-body">
+          Your three reflection answers (Q1, Q2, Q3) are stored in a <strong>separate anonymous table</strong> with no name, student ID, or any identifying information attached.
+          <ul>
+            <li>Classified by AI into learning signals only</li>
+            <li>Stored without any student identifier</li>
+            <li>Cannot be traced back to you</li>
+            <li>Used only for aggregated class-level pattern analysis</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-icon">📊</div>
+        <div class="gov-card-title">Faculty Dashboard — Aggregated Only</div>
+        <div class="gov-card-body">
+          The faculty learning signals dashboard shows <strong>only aggregated patterns</strong>. No individual student response is ever displayed.
+          <ul>
+            <li>Clusters with fewer than 3 responses are suppressed for privacy</li>
+            <li>No individual attribution — ever</li>
+            <li>AI signals require faculty review before any action</li>
+            <li>Faculty decision remains final on all instructional matters</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <div class="section-title">Governance Rules</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+        {% set rules = [
+          ('🚫', 'No grading', 'Reflection data is never used to assign grades.'),
+          ('🚫', 'No ranking', 'Students are never ranked or compared individually.'),
+          ('🚫', 'No individual attribution', 'The learning dashboard never shows named responses.'),
+          ('✅', 'Completion tracking is separate', 'Identity and reflection content are stored in different tables.'),
+          ('✅', 'Anonymous analysis only', 'Reflection content is analyzed without any student identifier.'),
+          ('✅', 'Aggregated dashboard only', 'Faculty see class-level patterns, not individual submissions.'),
+          ('✅', 'Faculty decision remains final', 'AI-generated signals are advisory, not deterministic.'),
+          ('✅', 'AI signals require faculty review', 'No automated action is taken based on AI output alone.')
+        ] %}
+        {% for icon, title, desc in rules %}
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--surface-alt);border-radius:var(--radius-sm);">
+          <span style="font-size:18px;flex-shrink:0;">{{ icon }}</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">{{ title }}</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">{{ desc }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Data Separation Architecture</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;">
+        <div style="text-align:center;padding:20px;background:var(--surface-alt);border-radius:var(--radius);border:1px solid var(--border);">
+          <div style="font-size:28px;margin-bottom:8px;">🪪</div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:4px;">completion_log</div>
+          <div style="font-size:12px;color:var(--text-muted);">name · student_id · topic · timestamp</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#b45309;background:#fef3c7;padding:4px 10px;border-radius:100px;display:inline-block;">Identifiable</div>
+        </div>
+        <div style="font-size:28px;color:var(--border);">⟷</div>
+        <div style="text-align:center;padding:20px;background:var(--surface-alt);border-radius:var(--radius);border:1px solid var(--border);">
+          <div style="font-size:28px;margin-bottom:8px;">🧠</div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:4px;">anonymous_analysis</div>
+          <div style="font-size:12px;color:var(--text-muted);">topic · q1 · q2 · q3 · signal</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#1b4332;background:#d8f3dc;padding:4px 10px;border-radius:100px;display:inline-block;">No identifier</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--text-muted);">
+        The two tables are <strong>never joined</strong>. There is no technical path from an anonymous reflection to a student name.
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
