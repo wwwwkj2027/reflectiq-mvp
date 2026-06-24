@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}API Setup — ReflectIQ{% endblock %}
+{% block content %}
+<div class="container">
+  <div style="padding: 48px 0 80px;">
+
+    <!-- Warning banner -->
+    <div class="demo-banner" style="margin-bottom:32px;">
+      <span class="demo-banner-icon">⚠️</span>
+      <div>
+        <strong>Demo-only setup.</strong> This page stores the API key in server process memory only — it is never written to disk, templates, source files, or your browser. The key is lost when the server restarts.
+        For production, use <strong>Replit Secrets</strong> or environment variables instead.
+      </div>
+    </div>
+
+    <h1 class="page-title" style="font-size:28px;margin-bottom:6px;">API Setup</h1>
+    <p class="page-sub" style="margin-bottom:36px;">
+      Paste your OpenAI API key below to enable Socratic follow-up generation and learning signal classification.
+      The key is held in server memory for this session only and is never shown in full anywhere.
+    </p>
+
+    <!-- Current key status -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="section-title" style="margin-bottom:16px;">Current Key Status</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+
+        <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px;">Active source</div>
+          <div id="statusSource" style="font-size:15px;font-weight:700;color:var(--text);">
+            {% if active_source == 'runtime' %}Session memory{% elif active_source == 'env' %}Environment variable{% else %}<span style="color:#ef4444;">None set</span>{% endif %}
+          </div>
+        </div>
+
+        <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px;">Key loaded</div>
+          <div id="statusLoaded" style="font-size:15px;font-weight:700;color:var(--text);">
+            {% if active_source != 'none' %}<span style="color:var(--success);">✓ true</span>{% else %}<span style="color:#ef4444;">false</span>{% endif %}
+          </div>
+        </div>
+
+        <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px;">Starts with</div>
+          <div id="statusPrefix" style="font-size:15px;font-weight:700;font-family:monospace;color:var(--text);">
+            {% if prefix %}{{ prefix }}…{% else %}<span style="color:var(--text-muted);">—</span>{% endif %}
+          </div>
+        </div>
+
+        <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:6px;">Key length</div>
+          <div id="statusLength" style="font-size:15px;font-weight:700;font-family:monospace;color:var(--text);">
+            {% if length %}{{ length }} chars{% else %}<span style="color:var(--text-muted);">—</span>{% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Save key form -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="section-title" style="margin-bottom:16px;">Paste Your API Key</div>
+
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label" for="apiKeyInput">OpenAI API Key</label>
+        <div class="form-hint">Starts with <code style="background:var(--surface-alt);padding:2px 6px;border-radius:4px;font-size:12px;">sk-</code> — the key is transmitted securely to the server and never stored in the browser.</div>
+        <input
+          type="password"
+          id="apiKeyInput"
+          placeholder="sk-…"
+          autocomplete="off"
+          spellcheck="false"
+          style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:monospace;color:var(--text);background:var(--surface);margin-top:8px;transition:border-color var(--transition);"
+          onfocus="this.style.borderColor='var(--primary)'"
+          onblur="this.style.borderColor='var(--border)'"
+        />
+      </div>
+
+      <div id="saveResult" style="display:none;margin-bottom:16px;"></div>
+
+      <div class="form-actions" style="justify-content:flex-start;gap:12px;">
+        <button type="button" id="btnSave" class="btn btn-primary">
+          Save API Key for This Session
+        </button>
+        <button type="button" id="btnTest" class="btn btn-secondary">
+          Test API Key
+        </button>
+      </div>
+
+      <div id="testResult" style="display:none;margin-top:16px;"></div>
+    </div>
+
+    <!-- Security notes -->
+    <div class="card">
+      <div class="section-title" style="margin-bottom:12px;">Security Notes</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+        {% set notes = [
+          ('✅', 'Stored in server memory only', 'The key lives in the Python process — it is gone when the server restarts.'),
+          ('✅', 'Never written to disk', 'Not saved to any file, database, log, or template.'),
+          ('✅', 'Never sent to the browser', 'Only the first 7 characters and length are returned after saving.'),
+          ('✅', 'Not in localStorage or cookies', 'Your browser holds no key information.'),
+          ('⚠️', 'Lost on server restart', 'You will need to re-enter the key after each restart. Use Replit Secrets for persistence.'),
+          ('⚠️', 'Demo-only', 'This mechanism is for exploration. Production deployments must use environment variables.')
+        ] %}
+        {% for icon, title, desc in notes %}
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--surface-alt);border-radius:var(--radius-sm);">
+          <span style="font-size:16px;flex-shrink:0;">{{ icon }}</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">{{ title }}</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">{{ desc }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const keyInput = document.getElementById('apiKeyInput');
+  const btnSave  = document.getElementById('btnSave');
+  const btnTest  = document.getElementById('btnTest');
+  const saveResult = document.getElementById('saveResult');
+  const testResult = document.getElementById('testResult');
+
+  function showResult(el, ok, html) {
+    el.style.display = 'block';
+    el.innerHTML = `<div class="alert ${ok ? 'alert-success' : 'alert-error'}" style="margin:0;">${html}</div>`;
+  }
+
+  function updateStatusCards(data) {
+    document.getElementById('statusSource').innerHTML  = '<span style="color:var(--success);">Session memory</span>';
+    document.getElementById('statusLoaded').innerHTML  = '<span style="color:var(--success);">✓ true</span>';
+    document.getElementById('statusPrefix').textContent = data.prefix + '…';
+    document.getElementById('statusLength').textContent = data.length + ' chars';
+  }
+
+  btnSave.addEventListener('click', async function () {
+    const key = keyInput.value.trim();
+    if (!key) { showResult(saveResult, false, 'Please paste your API key first.'); return; }
+
+    btnSave.disabled = true;
+    btnSave.textContent = 'Saving…';
+    saveResult.style.display = 'none';
+
+    try {
+      const resp = await fetch('/setup-api-key/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ api_key: key }),
+      });
+      const data = await resp.json();
+      if (data.ok) {
+        keyInput.value = '';
+        updateStatusCards(data);
+        showResult(saveResult, true,
+          `<strong>Key saved.</strong> key loaded: true &nbsp;·&nbsp; starts with: <code>${data.prefix}…</code> &nbsp;·&nbsp; length: ${data.length} chars`
+        );
+      } else {
+        showResult(saveResult, false, data.message || 'Save failed.');
+      }
+    } catch (e) {
+      showResult(saveResult, false, 'Network error — could not reach the server.');
+    } finally {
+      btnSave.disabled = false;
+      btnSave.textContent = 'Save API Key for This Session';
+    }
+  });
+
+  btnTest.addEventListener('click', async function () {
+    btnTest.disabled = true;
+    btnTest.textContent = 'Testing…';
+    testResult.style.display = 'none';
+
+    try {
+      const resp = await fetch('/setup-api-key/test', { method: 'POST' });
+      const data = await resp.json();
+      if (data.ok) {
+        showResult(testResult, true, `<strong>✓ Success.</strong> ${data.message}`);
+      } else {
+        showResult(testResult, false, `<strong>✗ Failed.</strong> ${data.message}`);
+      }
+    } catch (e) {
+      showResult(testResult, false, 'Network error — could not reach the server.');
+    } finally {
+      btnTest.disabled = false;
+      btnTest.textContent = 'Test API Key';
+    }
+  });
+})();
+</script>
+{% endblock %}
