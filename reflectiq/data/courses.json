@@ -1,0 +1,321 @@
+{
+  "courses": [
+    {
+      "id": "emtech_1800",
+      "name": "Emerging Technologies",
+      "code": "MASY1-GC 1800",
+      "semester": "Summer 2026",
+      "topics": [
+        {
+          "id": "intro_origins",
+          "label": "Introduction: Origins of Technology & Life Cycle Stages",
+          "week": 1,
+          "objectives": [
+            "Explain how technologies emerge from scientific, social, and economic conditions",
+            "Describe the key stages of a technology life cycle",
+            "Apply life cycle models (e.g., Gartner Hype Cycle, S-Curve) to a current technology",
+            "Identify methods for tracking and assessing emerging technologies"
+          ],
+          "key_concepts": [
+            "Technology emergence",
+            "Path to adoption",
+            "Life cycle stages",
+            "Gartner Hype Cycle",
+            "S-Curve adoption model",
+            "Technology assessment frameworks"
+          ],
+          "common_confusions": [
+            "Confusing invention (first creation) with emergence (societal uptake)",
+            "Treating life cycle stages as fixed timelines rather than variable trajectories",
+            "Conflating the Gartner Hype Cycle with actual market adoption data"
+          ],
+          "example_applications": [
+            "Mapping generative AI onto the Gartner Hype Cycle",
+            "Tracing the S-curve of smartphone adoption from 2007–2015",
+            "Using Forrester's Technology Radar to track enterprise software trends"
+          ]
+        },
+        {
+          "id": "creative_destruction",
+          "label": "Creative Destruction: Economic Forces Behind Emerging Technologies",
+          "week": 2,
+          "objectives": [
+            "Define creative destruction and its role in economic evolution",
+            "Identify economic incentives that drive technology creation and displacement",
+            "Analyze industry examples where creative destruction reshaped markets",
+            "Evaluate the winners and losers of a creative destruction event"
+          ],
+          "key_concepts": [
+            "Schumpeter's creative destruction",
+            "Incumbent displacement",
+            "Economic rents and technology surplus",
+            "Market disruption vs. market transformation",
+            "Technology-driven labor market shifts"
+          ],
+          "common_confusions": [
+            "Assuming creative destruction is always negative — it simultaneously destroys and creates value",
+            "Conflating disruption (market restructuring) with incremental improvement",
+            "Underestimating incumbents' ability to adapt vs. new entrants' speed advantage"
+          ],
+          "example_applications": [
+            "Netflix displacing Blockbuster through streaming",
+            "Digital photography destroying Kodak's film business",
+            "Ride-sharing restructuring urban transportation and taxi licensing markets"
+          ]
+        },
+        {
+          "id": "human_forces",
+          "label": "Human Forces Behind Emerging Technology Creation",
+          "week": 3,
+          "objectives": [
+            "Identify psychological, social, and cultural drivers of technology creation",
+            "Explain how individual motivation and team dynamics shape innovation",
+            "Analyze the role of government, academia, and industry in technology ecosystems",
+            "Evaluate how human biases affect technology design and adoption"
+          ],
+          "key_concepts": [
+            "Intrinsic vs. extrinsic motivation",
+            "Innovation ecosystems",
+            "Technology culture and values",
+            "Cognitive biases in technology design",
+            "Human-centered design"
+          ],
+          "common_confusions": [
+            "Attributing innovation solely to lone genius rather than collaborative ecosystems",
+            "Overlooking how cultural and political values shape what gets built and funded",
+            "Conflating user needs (stated) with user behaviors (revealed)"
+          ],
+          "example_applications": [
+            "How DARPA's mission-driven funding model shaped the internet",
+            "Silicon Valley's failure-tolerant culture compared to European risk aversion",
+            "How algorithmic bias emerges from non-representative development teams"
+          ]
+        },
+        {
+          "id": "tech_creation",
+          "label": "Technology Creation",
+          "week": 4,
+          "objectives": [
+            "Describe the stages of the technology creation process from research to prototype",
+            "Distinguish between basic research, applied research, and development",
+            "Explain the role of intellectual property in protecting and commercializing technology",
+            "Analyze how resource allocation decisions shape the direction of new technology"
+          ],
+          "key_concepts": [
+            "R&D pipeline stages",
+            "Technology readiness levels (TRLs)",
+            "Intellectual property (patents, trade secrets)",
+            "Technology transfer",
+            "Funding mechanisms (VC, grants, corporate R&D)"
+          ],
+          "common_confusions": [
+            "Conflating research (knowledge creation) with development (product realization)",
+            "Assuming patents always lead to commercialization — many are defensive or dormant",
+            "Underestimating the 'valley of death' between research and market-ready product"
+          ],
+          "example_applications": [
+            "How mRNA vaccine technology went from academic research to commercial product",
+            "SpaceX's approach to compressing the R&D-to-deployment cycle",
+            "University technology transfer offices and startup spinouts"
+          ]
+        },
+        {
+          "id": "creation_imitation",
+          "label": "Creation by Imitation",
+          "week": 5,
+          "objectives": [
+            "Explain the role of imitation and reverse engineering in technology diffusion",
+            "Distinguish between fast-follower strategies and pure imitation",
+            "Analyze cases where imitation led to superior or differentiated products",
+            "Evaluate the ethical and legal boundaries of technology imitation"
+          ],
+          "key_concepts": [
+            "Fast-follower advantage",
+            "Reverse engineering",
+            "Open-source and commons-based peer production",
+            "Technology licensing and cross-licensing",
+            "Learning by doing vs. learning by watching"
+          ],
+          "common_confusions": [
+            "Assuming first-mover advantage always wins — fast followers often outperform pioneers",
+            "Conflating imitation with plagiarism; many imitation strategies are legal and strategic",
+            "Overlooking how imitators add value through refinement, localization, or cost reduction"
+          ],
+          "example_applications": [
+            "Samsung's fast-follower strategy in consumer electronics vs. Apple",
+            "Alibaba modeling early features on eBay and Amazon, then localizing for China",
+            "Generic pharmaceutical manufacturers using reverse engineering after patent expiry"
+          ]
+        },
+        {
+          "id": "invention_innovation",
+          "label": "Invention, Innovation and Entrepreneurship",
+          "week": 6,
+          "objectives": [
+            "Distinguish between invention (new idea), innovation (applied idea), and entrepreneurship (commercialization)",
+            "Describe the entrepreneurial process from opportunity recognition to scaling",
+            "Analyze the role of business models in converting invention into economic value",
+            "Evaluate what separates successful from failed technology ventures"
+          ],
+          "key_concepts": [
+            "Invention vs. innovation vs. entrepreneurship",
+            "Opportunity recognition",
+            "Business model innovation",
+            "Lean startup methodology",
+            "Technology commercialization"
+          ],
+          "common_confusions": [
+            "Treating invention and innovation as synonymous — innovation requires adoption and value creation",
+            "Overemphasizing the idea vs. execution — most successful companies win on execution, not unique ideas",
+            "Confusing entrepreneurship with startups — entrepreneurship occurs in large organizations too (intrapreneurship)"
+          ],
+          "example_applications": [
+            "Xerox PARC invented the GUI; Apple innovated it into a mass-market product",
+            "Airbnb's innovation was a business model (asset-light accommodation), not a new technology",
+            "Google's PageRank as an academic invention commercialized through advertising innovation"
+          ]
+        },
+        {
+          "id": "diffusion_innovation",
+          "label": "Diffusion of Innovation",
+          "week": 7,
+          "objectives": [
+            "Apply Rogers' Diffusion of Innovation framework to a technology example",
+            "Identify adopter categories and their behavioral characteristics",
+            "Explain the role of social networks and opinion leaders in diffusion",
+            "Analyze barriers to adoption and strategies to overcome them"
+          ],
+          "key_concepts": [
+            "Rogers' diffusion of innovation",
+            "Adopter categories (innovators, early adopters, early majority, late majority, laggards)",
+            "Chasm theory (Geoffrey Moore)",
+            "Social contagion and network effects",
+            "Relative advantage, compatibility, complexity, trialability, observability"
+          ],
+          "common_confusions": [
+            "Assuming all technologies cross the chasm — many fail between early adopters and mainstream",
+            "Treating adopter categories as fixed personality types rather than context-dependent behaviors",
+            "Overlooking that different markets have different diffusion curves for the same technology"
+          ],
+          "example_applications": [
+            "EV adoption crossing the chasm in Norway vs. United States",
+            "COVID-19 vaccines showing different adoption curves across demographic groups",
+            "Telemedicine's rapid diffusion triggered by the pandemic — a constraint removal case"
+          ]
+        },
+        {
+          "id": "user_led_adoption",
+          "label": "User-Led Adoption of Emerging Technologies",
+          "week": 8,
+          "objectives": [
+            "Explain the concept of lead user innovation and user-driven technology development",
+            "Identify conditions under which users become co-innovators",
+            "Analyze how user communities shape product evolution",
+            "Evaluate the business implications of open vs. closed user innovation ecosystems"
+          ],
+          "key_concepts": [
+            "Lead user theory (von Hippel)",
+            "User-generated innovation",
+            "Open innovation ecosystems",
+            "Community-driven product development",
+            "User modification and hacking"
+          ],
+          "common_confusions": [
+            "Confusing user adoption with user innovation — not all adopters innovate",
+            "Assuming companies always benefit from user innovation — sometimes it disrupts their control",
+            "Overlooking how platform governance shapes what users are allowed to create or modify"
+          ],
+          "example_applications": [
+            "Reddit and Wikipedia as user-co-created platforms that outpaced corporate alternatives",
+            "3D printing communities developing new filaments and designs beyond manufacturer intent",
+            "GitHub enabling developer communities to shape open-source software direction"
+          ]
+        },
+        {
+          "id": "classification_strategy",
+          "label": "Emerging Technologies Classification and Adoption Strategy",
+          "week": 9,
+          "objectives": [
+            "Apply classification frameworks to categorize emerging technologies by maturity and impact",
+            "Develop an adoption strategy for an organization based on technology classification",
+            "Evaluate the risk-return profile of early vs. late adoption",
+            "Select appropriate assessment tools for tracking technology maturity"
+          ],
+          "key_concepts": [
+            "Technology classification frameworks",
+            "Adoption strategy (pioneer, fast-follower, wait-and-see)",
+            "Technology portfolio management",
+            "Risk-return trade-offs in technology adoption",
+            "Horizon planning (McKinsey 3 Horizons)"
+          ],
+          "common_confusions": [
+            "Assuming a single adoption strategy fits all technologies across all industries",
+            "Conflating technology maturity with organizational readiness — they are separate dimensions",
+            "Treating technology classification as static — the same technology may be emerging in one sector and mature in another"
+          ],
+          "example_applications": [
+            "A healthcare system deciding when to adopt AI diagnostics vs. waiting for FDA validation",
+            "McKinsey's 3-Horizons framework applied to a bank's fintech strategy",
+            "Gartner's Magic Quadrant as a classification tool for enterprise software selection"
+          ]
+        },
+        {
+          "id": "implement_poc",
+          "label": "Implementing Emerging Technologies — Proof of Concept (POC)",
+          "week": 10,
+          "objectives": [
+            "Define the purpose and scope of a Proof of Concept in technology implementation",
+            "Design a POC that validates the most critical assumptions of a technology initiative",
+            "Identify success criteria and failure modes for a POC",
+            "Distinguish a POC from a pilot, MVP, and full deployment"
+          ],
+          "key_concepts": [
+            "Proof of Concept (POC)",
+            "Assumption mapping and validation",
+            "Success criteria and metrics",
+            "POC vs. pilot vs. MVP",
+            "Technology risk reduction through staged implementation"
+          ],
+          "common_confusions": [
+            "Treating a POC as a miniature production system — scope and quality standards differ intentionally",
+            "Confusing POC success with business case validation — technical feasibility ≠ commercial viability",
+            "Skipping stakeholder alignment before POC — misaligned expectations cause POC-to-production failures"
+          ],
+          "example_applications": [
+            "A retailer running a POC to test RFID inventory tracking in one store before chain-wide rollout",
+            "A bank validating a blockchain trade finance concept with two counterparties before scaling",
+            "An airline testing AI-powered predictive maintenance on one aircraft type before fleet deployment"
+          ]
+        },
+        {
+          "id": "implement_pov",
+          "label": "Implementing Emerging Technologies — Proof of Value (POV)",
+          "week": 11,
+          "objectives": [
+            "Define the Proof of Value stage and how it differs from a POC",
+            "Design a POV that quantifies business impact and ROI",
+            "Identify the organizational and change management requirements for a successful POV",
+            "Build a business case for scaling a technology from POV to full deployment"
+          ],
+          "key_concepts": [
+            "Proof of Value (POV)",
+            "Business case development",
+            "ROI and value quantification",
+            "Change management in technology implementation",
+            "Scaling from POV to production"
+          ],
+          "common_confusions": [
+            "Assuming a successful POC automatically justifies a POV — POC shows it can work, POV shows it should scale",
+            "Underestimating organizational resistance as a failure mode for POV — the technology may work, but adoption may not",
+            "Conflating POV with full deployment — POV is still a bounded, controlled test environment"
+          ],
+          "example_applications": [
+            "A hospital system running a POV for AI-assisted radiology across three departments to measure throughput and accuracy ROI",
+            "A logistics company quantifying fuel savings from route optimization AI before national rollout",
+            "An insurer measuring claims processing speed and fraud detection uplift in a POV before enterprise deployment"
+          ]
+        }
+      ]
+    }
+  ]
+}
