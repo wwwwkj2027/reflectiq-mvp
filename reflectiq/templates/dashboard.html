@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% block title %}Faculty Dashboard — ReflectIQ{% endblock %}
+{% block content %}
+<div class="container--wide">
+  <div class="dashboard-wrap">
+
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+      <div>
+        <h1 class="page-title">Faculty Dashboard</h1>
+        <p class="page-sub">Emerging Technologies · MASY1-GC 1800 · Summer 2026 &nbsp;·&nbsp; Aggregated, anonymous learning signals only.</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        {% if has_demo %}
+        <form method="POST" action="{{ url_for('clear_demo') }}" style="margin:0;">
+          <button type="submit" class="btn btn-secondary" style="white-space:nowrap;font-size:13px;">Clear Demo Data</button>
+        </form>
+        {% else %}
+        <form method="POST" action="{{ url_for('load_demo') }}" style="margin:0;">
+          <button type="submit" class="btn btn-secondary" style="white-space:nowrap;font-size:13px;">Load Dummy Data</button>
+        </form>
+        {% endif %}
+        <a href="{{ url_for('completion') }}" class="btn btn-secondary" style="white-space:nowrap;">
+          View Completion Status →
+        </a>
+      </div>
+    </div>
+
+    {% if has_demo %}
+    <div class="demo-banner">
+      <span class="demo-banner-icon">🧪</span>
+      <div>
+        <strong>Demo data shown for MVP testing.</strong>
+        This dashboard is displaying 19 pre-loaded dummy reflections across 5 topics. No real student data has been collected yet.
+        <form method="POST" action="{{ url_for('clear_demo') }}" style="display:inline;margin-left:8px;">
+          <button type="submit" style="background:none;border:none;color:inherit;font-weight:600;cursor:pointer;text-decoration:underline;padding:0;font-size:inherit;">Clear demo data →</button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Governance notice -->
+    <div class="governance-notice">
+      <div class="governance-icon">🔒</div>
+      <div class="governance-text">
+        <strong>Governance:</strong> This dashboard shows only aggregated, anonymous data — no individual attribution, no grading, no ranking. Clusters with fewer than 3 responses are suppressed for privacy. AI-generated instructional signals require faculty review before any action. Faculty decision remains final.
+        <a href="{{ url_for('governance') }}" style="color:var(--primary);font-weight:600;text-decoration:none;">Full governance notice →</a>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" action="{{ url_for('dashboard') }}" class="filter-bar">
+      <label for="f_topic">Filter by topic:</label>
+      <select name="topic" id="f_topic" onchange="this.form.submit()">
+        <option value="">All topics</option>
+        {% for t in topics_for_filter %}
+        <option value="{{ t.topic_id }}" {% if t.topic_id == selected_topic %}selected{% endif %}>{{ t.topic_label }}</option>
+        {% endfor %}
+      </select>
+      {% if selected_topic %}
+      <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="padding:8px 12px;font-size:13px;">Clear filter</a>
+      {% endif %}
+    </form>
+
+    {% if total == 0 %}
+    <div class="card">
+      <div class="empty-state">
+        <h3>No reflections yet</h3>
+        <p>Once students submit reflections, aggregated patterns will appear here.</p>
+        <p style="margin-top:12px;font-size:14px;color:var(--text-muted);">
+          Want to see how the dashboard looks? Load the demo dataset above to explore with sample data.
+        </p>
+      </div>
+    </div>
+    {% else %}
+
+    <!-- KPI Summary -->
+    <div class="section-title" style="margin-bottom:12px;">KPI Summary</div>
+    <div class="kpi-grid" style="margin-bottom:32px;">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Total Reflections</div>
+        <div class="kpi-value">{{ total }}</div>
+        <div class="kpi-sub">anonymous submissions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Topics Covered</div>
+        <div class="kpi-value">{{ unique_topics }}</div>
+        <div class="kpi-sub">of 11 sessions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Comprehension Rate</div>
+        <div class="kpi-value">{{ comprehension_rate }}%</div>
+        <div class="kpi-sub">showing solid grasp</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Action Signals</div>
+        <div class="kpi-value">{{ action_signals|length }}</div>
+        <div class="kpi-sub">patterns flagged</div>
+      </div>
+      {% if suppressed_count > 0 %}
+      <div class="kpi-card" style="border-color:#e5e7eb;">
+        <div class="kpi-label">Suppressed Clusters</div>
+        <div class="kpi-value" style="font-size:24px;color:var(--text-muted);">{{ suppressed_count }}</div>
+        <div class="kpi-sub">&lt;3 responses (privacy)</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Top Cluster Cards -->
+    <div class="section-title">
+      Top Cluster Cards
+      <span class="badge">faculty review required</span>
+    </div>
+    {% if clusters %}
+    <div class="cluster-grid" style="margin-bottom:32px;">
+      {% for c in clusters %}
+      <div class="cluster-card {{ c.css }}">
+        <div class="cluster-label">{{ c.signal_type }}</div>
+        <div class="cluster-theme">{{ c.cluster_theme }}</div>
+        <div class="cluster-count">{{ c.count }}</div>
+        <div class="cluster-insight">
+          <div class="cluster-insight-title">Faculty Insight</div>
+          {{ c.faculty_insight }}
+        </div>
+        <div class="cluster-action">
+          <div class="cluster-action-title">Recommended Action</div>
+          {{ c.recommended_action }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if suppressed_count > 0 %}
+    <div class="suppressed-notice" style="margin-bottom:28px;">
+      <span>🔒</span>
+      <span><strong>{{ suppressed_count }} cluster{{ 's' if suppressed_count != 1 else '' }} suppressed</strong> — fewer than 3 responses in this signal category. Results are hidden to protect student privacy. Continue collecting reflections to surface these patterns.</span>
+    </div>
+    {% endif %}
+
+    <div class="dashboard-grid">
+
+      <!-- Signal Distribution -->
+      <div class="card">
+        <div class="section-title">Signal Distribution</div>
+        <div class="signal-list">
+          {% for s in signal_dist %}
+          <div class="signal-row">
+            <div class="signal-name">{{ s.label }}</div>
+            <div class="signal-bar-wrap">
+              <div class="signal-bar" style="width: {{ s.pct }}%"></div>
+            </div>
+            <div class="signal-count">
+              {% if s.suppressed %}
+              <span style="color:var(--text-light);font-size:11px;">suppressed</span>
+              {% else %}
+              {{ s.count }}
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div style="margin-top:16px;font-size:12px;color:var(--text-muted);">
+          AI-generated classification · requires faculty review before action · faculty decision remains final
+        </div>
+      </div>
+
+      <!-- Action Signals -->
+      <div class="card">
+        <div class="section-title">Action Signals</div>
+        {% if action_signals %}
+        <div class="action-list">
+          {% for a in action_signals %}
+          <div class="action-card {{ a.level if a.level in ['warn', 'urgent'] else '' }}">
+            <div class="action-title">
+              {% if a.level == 'urgent' %}⚠️ {% elif a.level == 'warn' %}🔶 {% else %}ℹ️ {% endif %}
+              {{ a.title }}
+            </div>
+            <div class="action-desc">{{ a.desc }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state" style="padding:24px;">
+          <p>No action signals at this time.</p>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- Topic-Level Pattern View -->
+    {% if topic_patterns %}
+    <div class="card" style="margin-top:4px;">
+      <div class="section-title">
+        Topic-Level Pattern View
+        <span class="badge">{{ topic_patterns|length }} topic{{ 's' if topic_patterns|length != 1 else '' }}</span>
+      </div>
+      <div class="topic-list">
+        {% for t in topic_patterns %}
+        <div class="topic-row">
+          <div class="topic-icon">📚</div>
+          <div class="topic-info">
+            <div class="topic-name">{{ t.topic_label }}</div>
+            <div class="topic-count">Week {{ t.week }} &nbsp;·&nbsp; {{ t.count }} anonymous reflection{{ 's' if t.count != 1 else '' }}</div>
+            <div class="topic-signals">
+              {% for s in t.top_signals %}
+              <span class="signal-chip {{ s.css }}">{{ s.label }}</span>
+              {% endfor %}
+              {% if t.suppressed %}
+              <span class="signal-chip" style="background:#f3f4f6;border-color:#d1d5db;color:#9ca3af;">+ suppressed</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
