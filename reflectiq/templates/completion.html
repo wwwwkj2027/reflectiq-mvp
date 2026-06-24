@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Completion Status — ReflectIQ{% endblock %}
+{% block content %}
+<div class="container--wide">
+  <div class="dashboard-wrap">
+
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+      <div>
+        <h1 class="page-title">Completion Status</h1>
+        <p class="page-sub">Emerging Technologies · MASY1-GC 1800 · Summer 2026 &nbsp;·&nbsp; Who submitted and when — no reflection content shown.</p>
+      </div>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="white-space:nowrap;">
+        ← Learning Dashboard
+      </a>
+    </div>
+
+    {% if has_demo %}
+    <div class="demo-banner">
+      <span class="demo-banner-icon">🧪</span>
+      <div>
+        <strong>Demo data shown for MVP testing.</strong>
+        These completion records are pre-loaded sample data — no real students have submitted yet.
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Governance notice -->
+    <div class="governance-notice">
+      <div class="governance-icon">🔒</div>
+      <div class="governance-text">
+        <strong>Completion tracking is separate from learning analysis.</strong> This page shows who submitted a reflection and when — it does not display reflection content, AI classifications, or learning signals. Identities on this page are never linked to the anonymous learning dashboard.
+        <a href="{{ url_for('governance') }}" style="color:var(--primary);font-weight:600;text-decoration:none;">Full governance notice →</a>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" action="{{ url_for('completion') }}" class="filter-bar">
+      <label for="f_topic">Filter by topic:</label>
+      <select name="topic" id="f_topic" onchange="this.form.submit()">
+        <option value="">All topics</option>
+        {% for t in all_topics %}
+        <option value="{{ t.id }}" {% if t.id == selected_topic %}selected{% endif %}>Week {{ t.week }} — {{ t.label }}</option>
+        {% endfor %}
+      </select>
+      {% if selected_topic %}
+      <a href="{{ url_for('completion') }}" class="btn btn-secondary" style="padding:8px 12px;font-size:13px;">Clear filter</a>
+      {% endif %}
+    </form>
+
+    <!-- KPI row -->
+    <div class="kpi-grid" style="margin-bottom:28px;">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Total Submissions</div>
+        <div class="kpi-value">{{ total_submissions }}</div>
+        <div class="kpi-sub">completion records</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Topics with Submissions</div>
+        <div class="kpi-value">{{ topics_with_submissions }}</div>
+        <div class="kpi-sub">of 11 sessions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Unique Students</div>
+        <div class="kpi-value">{{ unique_students }}</div>
+        <div class="kpi-sub">distinct IDs recorded</div>
+      </div>
+    </div>
+
+    {% if by_topic %}
+      {% for group in by_topic %}
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--primary);margin-bottom:4px;">Week {{ group.week }}</div>
+            <div style="font-size:16px;font-weight:700;color:var(--text);">{{ group.topic_label }}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:24px;font-weight:800;color:var(--text);letter-spacing:-0.5px;">{{ group.submissions|length }}</div>
+            <div style="font-size:12px;color:var(--text-muted);">submission{{ 's' if group.submissions|length != 1 else '' }}</div>
+          </div>
+        </div>
+
+        <table class="completion-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Full Name</th>
+              <th>Student ID</th>
+              <th>Submitted At (UTC)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in group.submissions %}
+            <tr {% if row.is_demo %}class="demo-row"{% endif %}>
+              <td style="color:var(--text-muted);width:40px;">{{ loop.index }}</td>
+              <td>
+                <strong>{{ row.student_name }}</strong>
+                {% if row.is_demo %}<span class="demo-tag">demo</span>{% endif %}
+              </td>
+              <td style="font-family:monospace;font-size:13px;">{{ row.student_id }}</td>
+              <td style="font-size:13px;color:var(--text-muted);">{{ row.submitted_at[:16].replace('T', ' ') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+          Compare against your class roster to identify students who have not yet submitted this session's reflection. Reflection content, AI signals, and learning classifications are never shown on this page.
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="card">
+        <div class="empty-state">
+          <h3>No submissions yet</h3>
+          <p>Once students complete reflections, their names and IDs will appear here for completion tracking.</p>
+          <p style="margin-top:12px;font-size:14px;color:var(--text-muted);">
+            Load demo data from the <a href="{{ url_for('dashboard') }}" style="color:var(--primary);text-decoration:none;font-weight:600;">Faculty Dashboard</a> to see how this page looks with sample records.
+          </p>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
