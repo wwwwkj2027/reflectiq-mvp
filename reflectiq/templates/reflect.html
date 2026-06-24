@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Reflect — {{ topic.label }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="reflect-wrap">
+
+    <!-- Progress indicator -->
+    <div class="step-indicator">
+      <div class="step active" id="stepEl1">
+        <div class="step-num">1</div>
+        <span class="step-label">Your Info</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" id="stepEl2">
+        <div class="step-num">2</div>
+        <span class="step-label">Reflection</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" id="stepEl3">
+        <div class="step-num">3</div>
+        <span class="step-label">Follow-up</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" id="stepEl4">
+        <div class="step-num">4</div>
+        <span class="step-label">Application</span>
+      </div>
+    </div>
+
+    <form id="reflectForm" method="POST" action="{{ url_for('submit') }}">
+      <input type="hidden" name="topic_id" id="topic_id" value="{{ topic_id }}" />
+      <input type="hidden" name="followup_q" id="followup_q" value="" />
+
+      <!-- ── Step 1: Identification ────────────────────────────────── -->
+      <div class="form-panel active" id="panel1">
+        <div class="card">
+          <div class="topic-banner">
+            <div class="topic-banner-week">Week {{ topic.week }}</div>
+            <div class="topic-banner-label">{{ topic.label }}</div>
+            <div class="topic-banner-course">{{ topic.course_name }} &nbsp;·&nbsp; {{ topic.code }}</div>
+          </div>
+
+          <div class="governance-inline">
+            <span class="gov-icon">🔒</span>
+            <div>
+              <strong>Completion tracking only.</strong> Your name and ID are stored separately from your reflection content. The learning dashboard never shows your identity.
+              <a href="{{ url_for('governance') }}" target="_blank" style="color:var(--primary);text-decoration:none;font-weight:600;">Learn more →</a>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="student_name">Full Name</label>
+              <input type="text" id="student_name" name="student_name" placeholder="First Last" autocomplete="name" required
+                style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;color:var(--text);background:var(--surface);transition:border-color var(--transition);"
+                onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="student_id">Student ID (N-number)</label>
+              <input type="text" id="student_id" name="student_id" placeholder="N12345678" autocomplete="off" required
+                style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;color:var(--text);background:var(--surface);transition:border-color var(--transition);"
+                onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back</a>
+            <button type="button" class="btn btn-primary" id="btnNext1">
+              Continue
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Step 2: Initial Reflection ────────────────────────────── -->
+      <div class="form-panel" id="panel2">
+        <div class="form-inner">
+          <div class="card">
+            <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:24px;">
+              <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">Learning objectives — {{ topic.label }}</div>
+              <ul style="margin:0;padding-left:18px;">
+                {% for obj in topic.objectives %}
+                <li style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:2px;">{{ obj }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="q1">
+                Q1 — What did you learn from this topic?
+              </label>
+              <div class="form-hint">Be specific. Describe a concept, idea, or insight that stood out to you. Your response is analyzed anonymously.</div>
+              <textarea
+                id="q1"
+                name="q1"
+                placeholder="In your own words, what did you take away from this topic?"
+                data-maxlength="800"
+                required
+              ></textarea>
+              <div class="char-count">0 / 800 characters</div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="btnBack2">← Back</button>
+              <button type="button" class="btn btn-primary" id="btnNext2">
+                Continue
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading state while AI generates follow-up -->
+        <div class="loading-state card">
+          <div class="spinner"></div>
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;">Generating your Socratic follow-up…</div>
+          <div style="font-size:13px;color:var(--text-muted);">Our AI coach is reading your reflection to craft a meaningful question.</div>
+        </div>
+      </div>
+
+      <!-- ── Step 3: Follow-up ──────────────────────────────────────── -->
+      <div class="form-panel" id="panel3">
+        <div class="card">
+          <div class="socratic-q">
+            <div class="q-label">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="margin-right:4px;"><path d="M6 1a5 5 0 100 10A5 5 0 006 1zm0 3.5a1 1 0 110 2 1 1 0 010-2zm0 3a.75.75 0 01.75.75v1a.75.75 0 01-1.5 0v-1A.75.75 0 016 7.5z" fill="currentColor"/></svg>
+              AI-Generated Follow-up Question
+            </div>
+            <div class="q-text" id="followup_q_display">Loading…</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="q2">
+              Q2 — Your answer
+            </label>
+            <div class="form-hint">Take your time. There's no right or wrong — this is about deepening your thinking. Your response is analyzed anonymously.</div>
+            <textarea
+              id="q2"
+              name="q2"
+              placeholder="Share your thoughts…"
+              data-maxlength="800"
+              required
+            ></textarea>
+            <div class="char-count">0 / 800 characters</div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btnBack3">← Back</button>
+            <button type="button" class="btn btn-primary" id="btnNext3">
+              Continue
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Step 4: Application ────────────────────────────────────── -->
+      <div class="form-panel" id="panel4">
+        <div class="card">
+          {% if topic.example_applications %}
+          <div style="background:var(--surface-alt);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:6px;">Example applications to spark your thinking</div>
+            <ul style="margin:0;padding-left:18px;">
+              {% for ex in topic.example_applications %}
+              <li style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:2px;">{{ ex }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <div class="form-group">
+            <label class="form-label" for="q3">
+              Q3 — Why does this concept matter, and how would you apply it to a real business or technology case?
+            </label>
+            <div class="form-hint">Think of a specific company, product, or scenario. Explain how you'd use what you've learned. Your response is analyzed anonymously.</div>
+            <textarea
+              id="q3"
+              name="q3"
+              placeholder="For example: 'I'd analyze Waymo's self-driving car rollout using the diffusion of innovation framework by…'"
+              data-maxlength="1000"
+              required
+            ></textarea>
+            <div class="char-count">0 / 1000 characters</div>
+          </div>
+
+          <div class="alert alert-info" style="font-size:13px;">
+            <strong>Privacy:</strong> Reflection content is submitted and analyzed anonymously. Your name and ID confirm completion only — they are never linked to your answers in the dashboard.
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btnBack4">← Back</button>
+            <button type="button" class="btn btn-primary btn-lg" id="btnSubmit">
+              Submit Reflection
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l5 5 7-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/reflect.js') }}"></script>
+{% endblock %}
