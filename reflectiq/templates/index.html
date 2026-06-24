@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}ReflectIQ — Emerging Technologies{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="hero">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 4v3M6 8.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Socratic Reflection
+    </div>
+    <h1>What are you learning<br>about today?</h1>
+    <p>Select a session topic to begin your Socratic reflection. Your content is analyzed anonymously — your name and ID are used only for completion tracking.</p>
+  </div>
+
+  {% for course in courses %}
+  <div style="margin-bottom: 16px;">
+    <div class="course-header">
+      <div class="course-meta">
+        <div class="course-name">{{ course.name }}</div>
+        <div class="course-code">{{ course.code }} &nbsp;·&nbsp; {{ course.semester }}</div>
+      </div>
+      <span class="badge">{{ course.topics|length }} sessions</span>
+    </div>
+    <div class="topic-card-grid">
+      {% for topic in course.topics %}
+      <a href="{{ url_for('reflect', topic=topic.id) }}" class="topic-select-card">
+        <div class="topic-week">Week {{ topic.week }}</div>
+        <h4>{{ topic.label }}</h4>
+        <p>{{ topic.objectives[0] }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
