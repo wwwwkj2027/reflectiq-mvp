@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}ReflectIQ{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="{{ url_for('index') }}" class="logo">
+        <div class="logo-mark">RQ</div>
+        <div>
+          <div class="logo-text">ReflectIQ</div>
+          <div class="logo-sub">NYU · Emerging Technologies</div>
+        </div>
+      </a>
+      <nav>
+        <div class="nav-group">
+          <span class="nav-group-label">Student</span>
+          <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint in ('index', 'reflect', 'student') else '' }}">Reflect</a>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-group">
+          <span class="nav-group-label">Faculty</span>
+          <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint in ('dashboard', 'faculty') else '' }}">Dashboard</a>
+          <a href="{{ url_for('completion') }}" class="{{ 'active' if request.endpoint == 'completion' else '' }}">Completion</a>
+          <a href="{{ url_for('governance') }}" class="{{ 'active' if request.endpoint == 'governance' else '' }}">Governance</a>
+          <a href="{{ url_for('setup_api_key') }}" class="{{ 'active' if request.endpoint == 'setup_api_key' else '' }}" style="border:1.5px solid var(--border);">API Setup</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
