@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Thank You — ReflectIQ{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="thankyou-wrap">
+    <div class="check-icon">✓</div>
+    <h2>Reflection submitted!</h2>
+    <p>Thank you for completing your Socratic reflection. Your name and student ID confirm your completion. Your reflection content is analyzed anonymously — it is never linked back to you in any faculty view.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Reflect on another topic</a>
+      <a href="{{ url_for('governance') }}" class="btn btn-secondary">How your data is used</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
